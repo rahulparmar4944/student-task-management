@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   //state declaration
-  const [formData, setFormData] = useState({
+  const [loginData, setLoginData] = useState({
     name: "",
     email: "",
     phone: "",
@@ -18,31 +18,31 @@ const Register = () => {
   const validate = () => {
     const newErrors = {}
 
-    if(!formData.name.trim()){
+    if(!loginData.name.trim()){
       newErrors.name = "Full name is required."
     }
-    else if(formData.name.length <= 3){
+    else if(loginData.name.length <= 3){
       newErrors.name = "Minimum 3 character required."
     }
 
-    if(!formData.email.trim()){
+    if(!loginData.email.trim()){
       newErrors.email = "Email is required."
     }
-    else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)){
+    else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginData.email)){
       newErrors.email = "Invalid Email format"
     }
 
-    if(!formData.phone.trim()){
+    if(!loginData.phone.trim()){
       newErrors.phone = "Phone Number is required."
     }
-    else if(!/^[0-9]{10}$/.test(formData.phone)){
+    else if(!/^[0-9]{10}$/.test(loginData.phone)){
       newErrors.phone = "Phone Must be in 10 digit."
   }
 
-  if(!formData.password.trim()){
+  if(!loginData.password.trim()){
       newErrors.password = "Phone Number is required."
     }
-    else if(formData.password.length <= 6){
+    else if(loginData.password.length <= 6){
       newErrors.password = " Minimum 6 character required."
   }
   setErrors(newErrors)
@@ -53,8 +53,8 @@ const Register = () => {
     //console.log(e.target.name,e.target.value)
 
     //e.target.name = e.target.value
-    setFormData({
-      ...formData,
+    setLoginData({
+      ...loginData,
       [e.target.name]: e.target.value,
     });
 
@@ -68,15 +68,15 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if(validate()){
-      localStorage.setItem('authData',JSON.stringify(formData))
+      localStorage.setItem('authData',JSON.stringify(loginData))
       alert("Successfull registration...!")
       navigate("/login")
   }
   };
 
   // useEffect(()=>{
-  //   console.log(formData)
-  // },[formData])
+  //   console.log(loginData)
+  // },[loginData])
 
   // Design
   return (
@@ -90,7 +90,7 @@ const Register = () => {
             type="text"
             id="name"
             name="name"
-            value={formData.name}
+            value={loginData.name}
             placeholder="Enter your full name"
             onChange={handleInputChange}
           />
@@ -103,7 +103,7 @@ const Register = () => {
             type="email"
             id="email"
             name="email"
-            value={formData.email}
+            value={loginData.email}
             placeholder="Enter your email"
             onChange={handleInputChange}
           />
@@ -116,7 +116,7 @@ const Register = () => {
             type="number"
             id="phone"
             name="phone"
-            value={formData.phone}
+            value={loginData.phone}
             placeholder="Enter your Phone"
             onChange={handleInputChange}
           />
@@ -129,7 +129,7 @@ const Register = () => {
             type="password"
             id="password"
             name="password"
-            value={formData.password}
+            value={loginData.password}
             placeholder="Enter your password"
             onChange={handleInputChange}
           />
