@@ -8,6 +8,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [editTask, setEditTask] = useState();
+  const [showForm, setShowForm] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -80,19 +81,44 @@ const Dashboard = () => {
     }
   };
 
+  const handleCompleteTask = async (id) =>{
+    const taskToggle = tasks.find((t)=> t.id === id);
+    const updateTask = {...taskToggle, completed: !taskToggle.completed};
+    try{
+      await fetch(`http://localhost:3000/tasks/${id}`,{
+        method: "PUT",
+        headers: { "Contemt-type": "application/json" },
+        body: JSON.stringify(updateTask),
+      })
+      setTasks(tasks.map((task) => (task.id === id ? updateTask : task)))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
   return (
     <div>
-      <Navbar title="Task Management" onLogout={handleLogout} />
-      <TaskForm
-        addTask={handleAddTask}
-        updateTask={handleUpdateTask}
-        editingTask={editTask}
+      <Navbar 
+        title="Task Management" 
+        isFormOpen={showForm}
+        onAddTaskBtnClick={() => setShowForm(!showForm)}
+        onLogout={handleLogout} 
       />
+      {showForm && (
+        <TaskForm
+          addTask={handleAddTask}
+          updateTask={handleUpdateTask}
+          editingTask={editTask}
+        />
+      )}
+    
       <h1> My Task </h1>
       <TaskList
         tasks={tasks}
         editingTask={editingTask}
         deletingTask={handleDeleteTask}
+        handleCompleteTask={handleCompleteTask}
       />
     </div>
   );

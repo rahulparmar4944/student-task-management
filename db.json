@@ -6,15 +6,17 @@
       "description": "hello react wellcome",
       "dueDate": "2026-02-19",
       "priority": "Medium",
-      "comleted": false
+      "comleted": true,
+      "completed": false
     },
     {
-      "id": "cf74",
-      "title": "Heeloo ",
-      "description": "hello react js",
-      "dueDate": "2026-02-21",
-      "priority": "High",
-      "comleted": false
+      "id": "3bf6",
+      "title": "wellcome react",
+      "description": "react task add",
+      "dueDate": "2026-02-05",
+      "priority": "Low",
+      "comleted": true,
+      "completed": false
     }
   ]
 }
