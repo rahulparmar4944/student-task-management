@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const TaskForm = ({ addTask }) => {
+const TaskForm = ({ addTask, updateTask, editingTask }) => {
   const [formData, setFormData] = useState({
     title: "",
-    desc: "",
-    date: "",
+    description: "",
+    dueDate: "",
     priority: "Low",
   });
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    setFormData(editingTask);
+  }, [editingTask]);
 
   const validate = () => {
     const newErrors = {};
@@ -18,14 +22,14 @@ const TaskForm = ({ addTask }) => {
       newErrors.title = "Minimum 6 character required.";
     }
 
-    if (!formData.desc.trim()) {
-      newErrors.desc = "description is required.";
-    } else if (formData.desc.length <= 6) {
-      newErrors.desc = "Minimum 6 character required.";
+    if (!formData.description.trim()) {
+      newErrors.description = "description is required.";
+    } else if (formData.description.length <= 6) {
+      newErrors.description = "Minimum 6 character required.";
     }
 
-    if (!formData.date) {
-      newErrors.date = "date is required.";
+    if (!formData.dueDate) {
+      newErrors.dueDate = "date is required.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -49,14 +53,20 @@ const TaskForm = ({ addTask }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      addTask(formData);
+      if (editingTask) {
+        updateTask(formData);
+      } else {
+        addTask(formData);
+      }
     }
+    resetForm();
   };
+
   const resetForm = () => {
     setFormData({
       title: "",
-      desc: "",
-      date: "",
+      description: "",
+      dueDate: "",
       priority: "Low",
     });
   };
@@ -70,7 +80,7 @@ const TaskForm = ({ addTask }) => {
             <input
               type="text"
               name="title"
-              value={formData.title}
+              value={formData?.title}
               placeholder="Task Title"
               onChange={handleInputChange}
             />
@@ -81,8 +91,8 @@ const TaskForm = ({ addTask }) => {
           <div>
             <textarea
               placeholder="Description"
-              value={formData.desc}
-              name="desc"
+              value={formData?.description}
+              name="description"
               rows="3"
               onChange={handleInputChange}
             />
@@ -92,17 +102,19 @@ const TaskForm = ({ addTask }) => {
             <div style={{ flex: 1 }}>
               <input
                 type="date"
-                value={formData.date}
-                name="date"
+                value={formData?.dueDate}
+                name="dueDate"
                 onChange={handleInputChange}
               />
-              {errors.date && <span className="error-msg">{errors.date}</span>}
+              {errors.dueDate && (
+                <span className="error-msg">{errors.dueDate}</span>
+              )}
             </div>
 
             <div style={{ flex: 1 }}>
               <select
                 name="priority"
-                value={formData.priority}
+                value={formData?.priority}
                 onChange={handleInputChange}
               >
                 <option value="Low">Low Priority</option>
@@ -117,7 +129,7 @@ const TaskForm = ({ addTask }) => {
             style={{ display: "flex", gap: "10px", marginTop: "10px" }}
           >
             <button type="submit" className="btn-primary" style={{ flex: 1 }}>
-              Add Task
+              {editingTask ? "Update" : "Add"} Task
             </button>
 
             <button type="button" className="btn-secondary" style={{ flex: 1 }}>
